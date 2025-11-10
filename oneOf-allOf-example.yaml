@@ -27,6 +27,29 @@ tags:
   - name: Items
     description: It's dangerous to go alone. Take this.
 paths:
+  /store-item/{id}:
+    get:
+      tags:
+        - Backpacks
+        - Items
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the object to be retrieved
+          schema:
+            type: string
+            format: UUID
+      responses:
+        200:
+          description: Object was successfully retrieved
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Backpack'
+                  - $ref: '#/components/schemas/Item'
+  
   /backpacks:
     get:
       tags:
@@ -60,7 +83,9 @@ paths:
                   backpacks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Backpack'
+                      allOf:
+                        - $ref: '#/components/schemas/Backpack'
+                        - $ref: '#/components/schemas/AuditFields'
     post:
       tags:
         - Backpacks
@@ -120,7 +145,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Backpack'
+                allOf:
+                  - $ref: '#/components/schemas/Backpack'
+                  - $ref: '#/components/schemas/AuditFields'
     patch:
       tags:
         - Backpacks
@@ -155,7 +182,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Backpack'
+                allOf:
+                  - $ref: '#/components/schemas/Backpack'
+                  - $ref: '#/components/schemas/AuditFields'
     delete:
       tags:
         - Backpacks
@@ -213,7 +242,9 @@ paths:
                   backpacks:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Item'
+                      allOf:
+                        - $ref: '#/components/schemas/Item'
+                        - $ref: '#/components/schemas/AuditFields'
     post:
       tags:
         - Items
@@ -239,7 +270,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                allOf:
+                  - $ref: '#/components/schemas/Item'
+                  - $ref: '#/components/schemas/AuditFields'
   /items/{id}:
     get:
       tags:
@@ -268,7 +301,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                allOf:
+                  - $ref: '#/components/schemas/Item'
+                  - $ref: '#/components/schemas/AuditFields'
     patch:
       tags:
         - Items
@@ -303,7 +338,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                allOf:
+                  - $ref: '#/components/schemas/Item'
+                  - $ref: '#/components/schemas/AuditFields'
     delete:
       tags:
         - Items
@@ -366,7 +403,29 @@ components:
         weight:
           type: integer
           description: The weight of the item in grams.
-
+    AuditFields:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: DateTime
+          description: The date and time of creation
+        createdBy:
+          type: string
+          format: UUID
+          description: The id of the user responsible for creation
+        lastUpdatedAt:
+          type: string
+          format: DateTime
+          description: The date and time of the last update
+        lastUpdateBy:
+          type: string
+          format: UUID
+          description: The id of the user responsible for the last update
+        deletedAt:
+          type: string
+          format: DateTime
+          description: The date and time of the deletion
   securitySchemes:
     backpack_auth:
       type: oauth2
