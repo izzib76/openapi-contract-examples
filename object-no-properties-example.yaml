@@ -213,7 +213,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  items:
+                  backpacks:
                     type: array
                     items:
                       $ref: '#/components/schemas/Item'
@@ -352,16 +352,6 @@ components:
           type: array
           items:
             type: object
-            properties:
-              id:
-                type: string
-                format: UUID
-                description: The id of the item in the backpack.
-                example: d98418f6-5f1d-4ba4-9153-66b95c06df37
-              quantity:
-                type: integer
-                description: The amount of the item in the backpack.
-                example: 4
     Item:
       type: object
       properties:
